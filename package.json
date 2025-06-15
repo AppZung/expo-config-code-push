@@ -1,6 +1,6 @@
 {
   "name": "@appzung/expo-config-code-push",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Config plugin to auto configure AppZung CodePush for React Native on prebuild",
   "main": "build/withReactNativeCodePush.js",
   "types": "build/withReactNativeCodePush.d.ts",
