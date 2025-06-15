@@ -45,23 +45,44 @@ const withIos: ConfigPlugin<PluginProps> = (config, { ios }) => {
     const { modResults } = config;
     const { language } = modResults;
 
-    if (language !== 'objc' && language !== 'objcpp') {
-      throw new Error(`Cannot modify the project AppDelegate as it's not in a supported language: ${language}`);
+    switch (language) {
+      case 'objc':
+      case 'objcpp': {
+        config.modResults.contents = mergeContents({
+          src: modResults.contents,
+          comment: '//',
+          tag: '@appzung/react-native-code-push-header',
+          offset: 1,
+          anchor: /#import "AppDelegate\.h"/,
+          newSrc: '#import <CodePush/CodePush.h>',
+        }).contents;
+
+        config.modResults.contents = config.modResults.contents.replace(
+          /return \[\[NSBundle mainBundle] URLForResource:@"main" withExtension:@"jsbundle"];/,
+          `// @appzung/react-native-code-push-bundle\n  return [CodePush bundleURL];`,
+        );
+        break;
+      }
+      case 'swift': {
+        config.modResults.contents = mergeContents({
+          src: modResults.contents,
+          comment: '//',
+          tag: '@appzung/react-native-code-push-header',
+          offset: 1,
+          anchor: /import React/,
+          newSrc: 'import CodePush',
+        }).contents;
+
+        config.modResults.contents = config.modResults.contents.replace(
+          /return Bundle\.main\.url\(forResource: "main", withExtension: "jsbundle"\)/,
+          `// @appzung/react-native-code-push-bundle\n    return CodePush.bundleURL()`,
+        );
+        break;
+      }
+      default: {
+        throw new Error(`Cannot modify the project AppDelegate as it's not in a supported language: ${language}`);
+      }
     }
-
-    config.modResults.contents = mergeContents({
-      src: modResults.contents,
-      comment: '//',
-      tag: '@appzung/react-native-code-push-header',
-      offset: 1,
-      anchor: /#import "AppDelegate\.h"/,
-      newSrc: '#import <CodePush/CodePush.h>',
-    }).contents;
-
-    config.modResults.contents = config.modResults.contents.replace(
-      /return \[\[NSBundle mainBundle] URLForResource:@"main" withExtension:@"jsbundle"];/,
-      `// @appzung/react-native-code-push-bundle\n  return [CodePush bundleURL];`,
-    );
 
     return config;
   });
