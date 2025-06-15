@@ -6,9 +6,10 @@ Expo Config Plugin to auto-configure [`@appzung/react-native-code-push`](https:/
 
 Ensure you use versions that work together!
 
-| `expo` | `@appzung/react-native-code-push` | `@appzung/expo-config-code-push` |
-| ------ | --------------------------------- | -------------------------------- |
-| 52.0.0 | 10+                               | 1.0.0                            |
+| `expo` | Old arch | New arch | `@appzung/react-native-code-push` | `@appzung/expo-config-code-push` |
+| ------ | -------- | -------- | --------------------------------- | -------------------------------- |
+| 52+    | ✅       | ❌       | 10+                               | ^1.0.0                           |
+| 52+    | ✅       | ✅       | 11+                               | ^1.0.0                           |
 
 ## Expo installation
 
