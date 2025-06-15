@@ -171,6 +171,15 @@ const withAndroid: ConfigPlugin<PluginProps> = (config, { android }) => {
           }`,
       }).contents;
 
+      config.modResults.contents = mergeContents({
+        src: modResults.contents,
+        comment: '//',
+        tag: '@appzung/react-native-code-push-main-application-kt-oncreate',
+        offset: 1,
+        anchor: /super\.onCreate\(\)/,
+        newSrc: `    CodePush.getInstance(this)`,
+      }).contents;
+
       return config;
     }
 
