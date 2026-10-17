@@ -160,16 +160,28 @@ const withAndroid: ConfigPlugin<PluginProps> = (config, { android }) => {
     );
 
     if (language === 'kt') {
-      config.modResults.contents = mergeContents({
-        src: modResults.contents,
-        comment: '//',
-        tag: '@appzung/react-native-code-push-main-application-kt',
-        offset: 1,
-        anchor: /override fun getUseDeveloperSupport\(\): Boolean = BuildConfig\.DEBUG/,
-        newSrc: `          override fun getJSBundleFile(): String {
+      if (/ExpoReactHostFactory\.getDefaultReactHost\(/.test(config.modResults.contents)) {
+        // Expo SDK 55+
+        config.modResults.contents = mergeContents({
+          src: config.modResults.contents,
+          comment: '//',
+          tag: '@appzung/react-native-code-push-main-application-kt',
+          offset: 1,
+          anchor: /context = applicationContext,/,
+          newSrc: `      jsBundleFilePath = CodePush.getJSBundleFile(),`,
+        }).contents;
+      } else {
+        config.modResults.contents = mergeContents({
+          src: config.modResults.contents,
+          comment: '//',
+          tag: '@appzung/react-native-code-push-main-application-kt',
+          offset: 1,
+          anchor: /override fun getUseDeveloperSupport\(\): Boolean = BuildConfig\.DEBUG/,
+          newSrc: `          override fun getJSBundleFile(): String {
               return CodePush.getJSBundleFile()
           }`,
-      }).contents;
+        }).contents;
+      }
 
       config.modResults.contents = mergeContents({
         src: modResults.contents,
