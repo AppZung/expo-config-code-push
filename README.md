@@ -10,7 +10,7 @@ Ensure you use versions that work together!
 |--------|----------|----------|-----------------------------------|----------------------------------|
 | 52-54  | ✅       | ❌       | 10+                               | ^1.0.0                           |
 | 52-54  | ✅       | ✅       | 11+                               | ^1.0.0                           |
-| 55-58  | ✅       | ✅       | 11.0.6+                           | ^1.2.0                           |
+| 55-58* | ✅       | ✅       | 11.0.6+                           | ^1.2.0                           |
 
 *For Expo SDK v56, you need to use `EXPO_PUBLIC_USE_RN_FETCH=1` because Expo's `fetch` has a bug that is incompatible with our module. This was fixed by Expo in v57.
 
